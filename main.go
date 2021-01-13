@@ -20,15 +20,17 @@ Usage:
 `
 
 func usage() {
-	exitCode := -1
+	exitCode := 2
 	fmt.Fprintf(os.Stderr, "%v\n", helpText)
 	os.Exit(exitCode)
 }
 
 var port string
+var help bool
 var logger = log.New(os.Stdout, "http-proxy: ", log.LstdFlags)
 
 func init() {
+	flag.BoolVar(&help, "help", false, helpText)
 	flag.StringVar(&port, "port", "8080", "server listen port")
 	flag.Parse()
 }
@@ -106,5 +108,8 @@ func handle(conn net.Conn) {
 }
 
 func main() {
+	if help {
+		usage()
+	}
 	startServer()
 }
